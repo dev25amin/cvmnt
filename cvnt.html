@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amine Essah | Full Stack Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+
+    body[dir="rtl"] {
+      font-family: 'Cairo', sans-serif;
+    }
+
+    /* Variables CSS pour les thèmes */
+    :root {
+      /* Dark mode (default) */
+      --bg-color: #0a0a0a;
+      --text-color: #ffffff;
+      --secondary-bg: #1a1a1a;
+      --tertiary-bg: #2d2d2d;
+      --border-color: #333;
+      --accent-color: #00ff88;
+      --blue-accent: #0099ff;
+      --pink-accent: #ff0099;
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --secondary-bg: #f8f9fa;
+      --tertiary-bg: #e9ecef;
+      --border-color: #dee2e6;
+      --accent-color: #00b366;
+      --blue-accent: #0077cc;
+      --pink-accent: #cc0077;
+      --card-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+      background: radial-gradient(circle at 20% 20%, var(--accent-color) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, var(--blue-accent) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 60%, var(--pink-accent) 0%, transparent 50%);
+      animation: pulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.05; }
+      100% { opacity: 0.15; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      background: var(--secondary-bg);
+      padding: 10px;
+      border-radius: 25px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .control-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .control-btn:hover {
+      background: var(--accent-color);
+      color: var(--bg-color);
+      transform: translateY(-2px);
+    }
+
+    .control-btn.active {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+
+    .terminal-header {
+      background: linear-gradient(135deg, var(--secondary-bg), var(--tertiary-bg));
+      border: 1px solid var(--border-color);
+      border-radius: 12px 12px 0 0;
+      padding: 1rem 2rem;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terminal-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-color), var(--blue-accent), var(--pink-accent), var(--accent-color));
+      animation: scan 3s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff5f57;
+    }
+    .dot:nth-child(2) { background: #ffbd2e; }
+    .dot:nth-child(3) { background: #28ca42; }
+
+    .terminal-title {
+      font-size: 1.1rem;
+      color: var(--accent-color);
+      font-weight: 500;
+    }
+
+    .main-content {
+      background: linear-gradient(135deg, var(--secondary-bg), var(--tertiary-bg));
+      border: 1px solid var(--border-color);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 255, 136, 0.1);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .glitch {
+      font-size: 4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+      color: var(--text-color);
+      letter-spacing: -2px;
+      animation: glitch 2s infinite;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch::before {
+      animation: glitch-1 0.5s infinite;
+      color: var(--accent-color);
+      z-index: -1;
+    }
+
+    .glitch::after {
+      animation: glitch-2 0.5s infinite;
+      color: var(--pink-accent);
+      z-index: -2;
+    }
+
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-2px, 2px); }
+      80% { transform: translate(-2px, -2px); }
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      margin: 1rem 0 2rem;
+      font-weight: 400;
+    }
+
+    .typing {
+      font-size: 1.2rem;
+      color: #999;
+      font-family: 'Courier New', monospace;
+      border-right: 2px solid var(--accent-color);
+      animation: typing 3s steps(40, end), blink 1s infinite;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .contact-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .contact-item {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .contact-item:hover::before {
+      left: 100%;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+    }
+
+    .contact-item a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .section {
+      margin: 4rem 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-color), var(--blue-accent));
+      border-radius: 2px;
+    }
+
+    .code-block {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      font-family: 'Courier New', monospace;
+      position: relative;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+
+    .code-block::before {
+      content: "// Skills.js";
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .skills-code {
+      color: var(--accent-color);
+    }
+
+    .skills-code .keyword { color: var(--pink-accent); }
+    .skills-code .string { color: var(--blue-accent); }
+    .skills-code .comment { color: #666; }
+
+    .project-terminal {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+
+    .project-header {
+      background: var(--tertiary-bg);
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-body {
+      padding: 2rem;
+    }
+
+    .project-title {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .project-description {
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      background: rgba(0, 153, 255, 0.2);
+      color: var(--blue-accent);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      border: 1px solid var(--blue-accent);
+    }
+
+    .cta-section {
+      text-align: center;
+      margin: 4rem 0 2rem;
+      padding: 3rem;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+      border-radius: 12px;
+    }
+
+    .hire-btn {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: linear-gradient(45deg, var(--accent-color), var(--blue-accent));
+      color: var(--bg-color);
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hire-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .hire-btn:hover::before {
+      left: 100%;
+    }
+
+    .hire-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 255, 136, 0.4);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: block;
+    }
+
+    .stat-label {
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .main-content { padding: 2rem; }
+      .glitch { font-size: 2.5rem; }
+      .section-title { font-size: 2rem; }
+      .contact-matrix { grid-template-columns: 1fr; }
+      .controls {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 2rem;
+        justify-content: center;
+      }
+    }
+
+    /* Animation pour le changement de langue */
+    .fade-transition {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .fade-in {
+      opacity: 1;
+    }
+    .terminal-title {
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: #00ff88;
+  margin-bottom: 1rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00ff88;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="matrix-bg"></div>
+  
+  <div class="controls">
+    <button class="control-btn theme-toggle" data-theme="light">☀️</button>
+    <button class="control-btn lang-btn active" data-lang="en">EN</button>
+    <button class="control-btn lang-btn" data-lang="fr">FR</button>
+    <button class="control-btn lang-btn" data-lang="ar">َAR</button>
+  </div>
+
+  <div class="container">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+<div class="terminal-title">
+  <span class="status-dot"></span>
+  <span data-text="terminal-title">Online Service - Contact Us ./start.sh</span>
+</div>
+
+    </div>
+    
+    <div class="main-content">
+      <div class="hero">
+        <h1 class="glitch" data-text="AMINE ESSAH">AMINE ESSAH</h1>
+        <p class="subtitle" data-text="subtitle">Full Stack Developer | Laravel & React Expert</p>
+        <div class="typing" data-text="typing">
+Welcome! Your ideas can be turned into reality. Contact us to create your project..
+         </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <span class="stat-number">8+</span>
+          <span class="stat-label" data-text="years-exp">Years of Experience</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">50+</span>
+          <span class="stat-label" data-text="projects">Projects Delivered</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">100%</span>
+          <span class="stat-label" data-text="satisfaction">Client Satisfaction</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label" data-text="dedication">Dedication</span>
+        </div>
+      </div>
+
+      <div class="contact-matrix">
+        <div class="contact-item">
+          <div>📧 dev25amine@gmail.com</div>
+        </div>
+        <div class="contact-item">
+          <div>📱 +212 67665544</div>
+        </div>
+        <div class="contact-item">
+          <div>🌍 <span data-text="location">Casablanca, Morocco</span></div>
+        </div>
+        <div class="contact-item">
+          <div>💼 <a href="https://www.linkedin.com/in/amine-essah-88a10536b/">LinkedIn</a></div>
+        </div>
+        <div class="contact-item">
+          <div>🐦 <a href="https://x.com/EssahAmine68859">X Twitter</a></div>
+        </div>
+        <div class="contact-item">
+          <div>💻 <a href="https://github.com/dev25amin">GitHub</a></div>
+        </div>
+      </div>
+
+      <section class="section">
+        <h2 class="section-title" data-text="skills-title">Skills Matrix</h2>
+        <div class="code-block">
+          <div class="skills-code">
+<span class="keyword">const</span> skills = {<br>
+&nbsp;&nbsp;<span class="string">"backend"</span>: [<span class="string">"Laravel"</span>, <span class="string">"PHP"</span>, <span class="string">"Node.js"</span>],<br>
+&nbsp;&nbsp;<span class="string">"frontend"</span>: [<span class="string">"React"</span>, <span class="string">"Vue.js"</span>, <span class="string">"JavaScript"</span>],<br>
+&nbsp;&nbsp;<span class="string">"mobile"</span>: [<span class="string">"React Native"</span>, <span class="string">"Flutter"</span>],<br>
+&nbsp;&nbsp;<span class="string">"database"</span>: [<span class="string">"MySQL"</span>, <span class="string">"MariaDB"</span>, <span class="string">"MongoDB"</span>],<br>
+&nbsp;&nbsp;<span class="string">"ai"</span>: [<span class="string">"OpenAI API"</span>, <span class="string">"GPT Integration"</span>],<br>
+&nbsp;&nbsp;<span class="string">"deployment"</span>: [<span class="string">"cPanel"</span>, <span class="string">"AWS"</span>, <span class="string">"Docker"</span>]<br>
+};<br><br>
+<span class="comment">// Always learning, always improving</span>
+          </div>
+        </div>
+      </section>
+
+    <section class="section">
+  <h2 class="section-title" data-text="projects-title">My Creations</h2>
+
+  <!-- مشروع 1 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">E-Commerce-System</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">🛒 <span data-text="project1-title">Complete E-Commerce Solution</span></h3>
+      <p class="project-description" data-text="project1-desc">
+        Full-featured online store with payment integration, admin dashboard, and inventory management. Built with clean architecture and scalable design.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">React</span>
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">Stripe API</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 2 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">Task-Manager</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">📝 <span data-text="project2-title">Productivity Master</span></h3>
+      <p class="project-description" data-text="project2-desc">
+        Intuitive task management application with drag-and-drop interface, real-time updates and productivity analytics. Helps users stay organized.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">React</span>
+        <span class="tech-tag">Firebase</span>
+        <span class="tech-tag">Material UI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 3 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">University-System</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">🎓 <span data-text="project3-title">Education Management</span></h3>
+      <p class="project-description" data-text="project3-desc">
+        Comprehensive university system to manage students, courses and grades. Role-based access features and reporting tools.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">Vue.js</span>
+        <span class="tech-tag">PostgreSQL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 4 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">AI-Text-Analyzer</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">🤖 <span data-text="project4-title">AI Text Analyzer</span></h3>
+      <p class="project-description" data-text="project4-desc">
+        Tool for linguistic analysis and translation of French/Arabic texts using AI. Supports grammar breakdown, translation, and smart summaries.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">OpenAI/Gemini API</span>
+        <span class="tech-tag">React</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 5 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">Health-Diagnosis-App</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">🩺 <span data-text="project5-title">Smart Health Assistant</span></h3>
+      <p class="project-description" data-text="project5-desc">
+        Mobile app for early symptom diagnosis using AI. Customizable by user profile (age, gender, country) with health suggestions and advice.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">React Native</span>
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">Gemini API</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 6 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">Smart-Legal-Advisor</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">⚖️ <span data-text="project6-title">AI Legal Case Evaluator</span></h3>
+      <p class="project-description" data-text="project6-desc">
+        Web tool for analyzing legal cases with AI. Identifies errors, legal references, penalties, and practical suggestions based on local laws.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">Alpine.js</span>
+        <span class="tech-tag">OpenRouter API</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 7 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">EdTech-Exam-System</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">📚 <span data-text="project7-title">AI Exam Generator</span></h3>
+      <p class="project-description" data-text="project7-desc">
+        Online platform that generates exams based on subject, level and question type. Includes countdown, submission, and performance analysis.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">Gemini API</span>
+        <span class="tech-tag">React Native</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 8 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">AI-Language-Tutor</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">💬 <span data-text="project8-title">AI Language Tutor</span></h3>
+      <p class="project-description" data-text="project8-desc">
+        Conversational chatbot for language learners. Corrects grammar, provides translations, and adapts to user level with real-time feedback.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">React</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 9 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">Resume-Analyzer</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">📄 <span data-text="project9-title">Smart Resume Analyzer</span></h3>
+      <p class="project-description" data-text="project9-desc">
+        AI-powered resume screening tool for HR teams. Scores candidate profiles, detects red flags, and recommends interview questions.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Django</span>
+        <span class="tech-tag">TensorFlow</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- مشروع 10 -->
+  <div class="project-terminal">
+    <div class="project-header">
+      <div class="dot" style="background: #ff5f57;"></div>
+      <div class="dot" style="background: #ffbd2e;"></div>
+      <div class="dot" style="background: #28ca42;"></div>
+      <span style="color: #666; margin-left: 1rem;">Note-Summarizer</span>
+    </div>
+    <div class="project-body">
+      <h3 class="project-title">📝 <span data-text="project10-title">Smart Note Summarizer</span></h3>
+      <p class="project-description" data-text="project10-desc">
+        Tool for summarizing meeting notes, lectures, or long documents. Extracts key ideas and generates concise summaries in seconds.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-tag">Node.js</span>
+        <span class="tech-tag">Express</span>
+        <span class="tech-tag">OpenAI API</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<div class="cta-section">
+  <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-color);" data-text="cta-title">
+    Let's Build Something Together
+  </h2>
+  <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #999;" data-text="cta-subtitle">
+    With over a decade of experience crafting scalable and maintainable web applications, I specialize in turning complex ideas into elegant solutions. 
+    Staying ahead with modern technologies and best practices, I ensure every project is built for the future — fast, secure, and user-centric.
+  </p>
+  <a href="mailto:amine.sahraoui25@gmail.com" id="contact-btn" class="hire-btn" data-text="contact-btn">
+    CONTACT ME
+  </a>
+</div>
+
+    </div>
+  </div>
+
+  <script>
+    // Données de traduction
+  const translations = {
+  en: {
+
+    'terminal-title': 'Online Service - Contact Us ./start.sh',
+    'subtitle': 'Full Stack Developer | Laravel & React Expert',
+'typing': 'Welcome! Your ideas can be turned into reality. Contact us to create your project...',
+'years-exp': 'Years of Experience',
+    'projects': 'Projects Delivered',
+    'satisfaction': 'Client Satisfaction',
+    'dedication': 'Dedication',
+    'location': 'Casablanca, Morocco',
+    'skills-title': 'Skills Matrix',
+
+    'projects-title': 'Completed projects',
+    'project1-title': 'Complete E-Commerce Solution',
+    'project1-desc': 'Full-featured online store with payment integration, admin dashboard, and inventory management. Built with clean architecture and scalable design.',
+    'project2-title': 'Productivity Master',
+    'project2-desc': 'Intuitive task management application with drag-and-drop interface, real-time updates and productivity analytics. Helps users stay organized.',
+    'project3-title': 'Education Management',
+    'project3-desc': 'Comprehensive university system to manage students, courses and grades. Role-based access features and reporting tools.',
+    'project4-title': 'AI Text Analyzer',
+    'project4-desc': 'Tool for linguistic analysis and translation of French/Arabic texts using AI. Supports grammar breakdown, translation, and smart summaries.',
+    'project5-title': 'Smart Health Assistant',
+    'project5-desc': 'Mobile app for early symptom diagnosis using AI. Customizable by user profile (age, gender, country) with health suggestions and advice.',
+    'project6-title': 'AI Legal Case Evaluator',
+    'project6-desc': 'Web tool for analyzing legal cases with AI. Identifies errors, legal references, penalties, and practical suggestions based on local laws.',
+    'project7-title': 'AI Exam Generator',
+    'project7-desc': 'Online platform that generates exams based on subject, level and question type. Includes countdown, submission, and performance analysis.',
+    'project8-title': 'AI Language Tutor',
+    'project8-desc': 'Conversational chatbot for language learners. Corrects grammar, provides translations, and adapts to user level with real-time feedback.',
+    'project9-title': 'Smart Resume Analyzer',
+    'project9-desc': 'AI-powered resume screening tool for HR teams. Scores candidate profiles, detects red flags, and recommends interview questions.',
+    'project10-title': 'Smart Note Summarizer',
+    'project10-desc': 'Tool for summarizing meeting notes, lectures, or long documents. Extracts key ideas and generates concise summaries in seconds.',
+  
+    'cta-title': 'Let\'s Build Something Together',
+    'cta-subtitle': 'I transform ideas into functional and beautiful digital experiences.',
+    'contact-btn': 'CONTACT ME',
+
+
+
+    'cta-title': "Let's Build Something Together",
+    'cta-subtitle': "With over a decade of experience crafting scalable and maintainable web applications, I specialize in turning complex ideas into elegant solutions. Staying ahead with modern technologies and best practices, I ensure every project is built for the future — fast, secure, and user-centric.",
+    'contact-btn': "CONTACT ME",
+
+    
+
+},
+  fr: {
+
+    'terminal-title': 'Service en ligne - Contactez-nous ./start.sh',
+    'subtitle': 'Développeur Full Stack | Expert Laravel & React',
+'typing': 'Bienvenue ! Vos idées peuvent devenir réalité. Contactez-nous pour créer votre projet...',
+'years-exp': 'Années d\'expérience',
+    'projects': 'Projets livrés',
+    'satisfaction': 'Satisfaction client',
+    'dedication': 'Dévouement',
+    'location': 'Casablanca, Maroc',
+    'skills-title': 'Matrice des Compétences',
+
+    'projects-title': 'Projets terminés',
+    'project1-title': 'Solution E-Commerce Complète',
+    'project1-desc': 'Boutique en ligne complète avec intégration de paiement, tableau de bord administrateur, et gestion d\'inventaire. Construit avec une architecture propre et un design évolutif.',
+    'project2-title': 'Maître de la Productivité',
+    'project2-desc': 'Application de gestion des tâches intuitive avec interface glisser-déposer, mises à jour en temps réel et analyses de productivité. Aide les utilisateurs à rester organisés.',
+    'project3-title': 'Gestion Éducative',
+    'project3-desc': 'Système universitaire complet pour gérer les étudiants, les cours et les notes. Fonctionnalités d\'accès basé sur les rôles et outils de reporting.',
+    'project4-title': 'Analyseur de Texte IA',
+    'project4-desc': 'Outil d’analyse linguistique et de traduction de textes français/arabe utilisant l’IA. Prend en charge la décomposition grammaticale, la traduction et les résumés intelligents.',
+    'project5-title': 'Assistant Santé Intelligent',
+    'project5-desc': 'Application mobile pour le diagnostic précoce des symptômes avec IA. Personnalisable selon l’âge, le sexe et le pays avec des conseils de santé.',
+    'project6-title': 'Évaluateur Juridique IA',
+    'project6-desc': 'Outil web pour analyser les cas juridiques via l’IA. Détecte les erreurs, références légales, peines et propose des solutions pratiques.',
+    'project7-title': 'Générateur d’Examens IA',
+    'project7-desc': 'Plateforme en ligne qui génère des examens selon la matière, le niveau et le type de questions. Inclut minuteur, soumission, et analyse de performance.',
+    'project8-title': 'Tuteur Linguistique IA',
+    'project8-desc': 'Chatbot conversationnel pour les apprenants en langues. Corrige la grammaire, fournit des traductions, et s’adapte au niveau de l’utilisateur.',
+    'project9-title': 'Analyseur de CV Intelligent',
+    'project9-desc': 'Outil de présélection de CV basé sur l’IA pour les RH. Évalue les profils, détecte les points faibles et suggère des questions d’entretien.',
+    'project10-title': 'Résumé Intelligent de Notes',
+    'project10-desc': 'Outil de résumé de notes de réunions, conférences ou documents longs. Extrait les idées principales et génère des résumés concis rapidement.',
+  
+    'cta-title': 'Construisons Quelque Chose Ensemble',
+    'cta-subtitle': 'Je transforme les idées en expériences numériques fonctionnelles et belles.',
+    'contact-btn': 'ME CONTACTER',
+
+    'cta-title': "Construisons Quelque Chose Ensemble",
+    'cta-subtitle': "Avec plus d'une décennie d'expérience dans la création d'applications web évolutives et maintenables, je me spécialise dans la transformation d'idées complexes en solutions élégantes. Toujours à la pointe des technologies modernes et des meilleures pratiques, je veille à ce que chaque projet soit construit pour l'avenir — rapide, sécurisé et centré sur l'utilisateur.",
+    'contact-btn': "ME CONTACTER",
+
+    
+},
+  ar: {
+
+
+    'terminal-title': 'الخدمة عبر الإنترنت - اتصل بنا ./start.sh',
+    'subtitle': 'مطور فول ستاك | خبير Laravel و React',
+'typing': 'مرحباً بك! أنا هنا لأحول أفكارك إلى واقع. لا تتردد في التواصل معنا لإنشاء مشروعك .',
+    'years-exp': 'سنوات الخبرة',
+    'projects': 'مشاريع منجزة',
+    'satisfaction': 'رضا العملاء',
+    'dedication': 'التفاني',
+    'location': 'الدار البيضاء، المغرب',
+    'skills-title': 'مصفوفة المهارات',
+    'projects-title': ' المشاريع المنجزة',
+    'project1-title': 'حل التجارة الإلكترونية الشامل',
+    'project1-desc': 'متجر إلكتروني كامل مع تكامل الدفع ولوحة تحكم الإدارة وإدارة المخزون. مبني بهندسة نظيفة وتصميم قابل للتوسع.',
+    'project2-title': 'سيد الإنتاجية',
+    'project2-desc': 'تطبيق إدارة المهام البديهي مع واجهة السحب والإفلات والتحديثات في الوقت الفعلي وتحليلات الإنتاجية. يساعد المستخدمين على البقاء منظمين.',
+    'project3-title': 'الإدارة التعليمية',
+    'project3-desc': 'نظام جامعي شامل لإدارة الطلاب والمقررات والدرجات. ميزات الوصول القائم على الأدوار وأدوات التقارير.',
+    'project4-title': 'محلل النصوص الذكي',
+    'project4-desc': 'أداة لتحليل النصوص وترجمتها بين الفرنسية والعربية باستخدام الذكاء الاصطناعي. تدعم تفكيك الجمل، الترجمة، وتوليد ملخصات ذكية.',
+    'project5-title': 'مساعد صحي ذكي',
+    'project5-desc': 'تطبيق جوال لتشخيص الأعراض المبكرة باستخدام الذكاء الاصطناعي. قابل للتخصيص حسب العمر، الجنس، والدولة، ويقدم نصائح صحية.',
+    'project6-title': 'محلل القضايا القانونية بالذكاء الاصطناعي',
+    'project6-desc': 'منصة لتحليل القضايا القانونية باستخدام الذكاء الاصطناعي. تحدد الأخطاء، والمراجع القانونية، والعقوبات، وتقترح حلولاً عملية.',
+    'project7-title': 'مولد امتحانات ذكي',
+    'project7-desc': 'منصة على الإنترنت لتوليد الامتحانات حسب المادة والمستوى ونوع الأسئلة. تشمل عد تنازلي، إرسال، وتحليل النتائج.',
+    'project8-title': 'مدرب لغات بالذكاء الاصطناعي',
+    'project8-desc': 'روبوت محادثة لتعليم اللغات. يصحح الأخطاء اللغوية، يقدم ترجمات، ويتكيف مع مستوى المستخدم في الوقت الحقيقي.',
+    'project9-title': 'محلل السيرة الذاتية الذكي',
+    'project9-desc': 'أداة تعتمد على الذكاء الاصطناعي لتقييم السير الذاتية. تحلل الملف، تكشف النقاط السلبية وتقترح أسئلة مقابلات.',
+    'project10-title': 'ملخص الملاحظات الذكي',
+    'project10-desc': 'أداة لتلخيص الاجتماعات أو المحاضرات أو النصوص الطويلة. تستخرج الأفكار الأساسية وتنتج ملخصاً مختصراً خلال ثوانٍ.',
+      'cta-title': 'لننشئ شيئاً معاً',
+    'cta-subtitle': 'أحول الأفكار إلى تجارب رقمية وظيفية وجميلة.',
+    'contact-btn': 'اتصل بي',
+
+
+    'cta-title': "لننشئ شيئاً معاً",
+    'cta-subtitle': "بخبرة تزيد عن عقد من الزمن في تطوير تطبيقات ويب قابلة للتوسع وسهلة الصيانة، أتخصص في تحويل الأفكار المعقدة إلى حلول أنيقة. أبقى مواكبًا لأحدث التقنيات وأفضل الممارسات، لضمان أن يكون كل مشروع مبنيًا للمستقبل — سريع، آمن، ويركز على المستخدم.",
+    'contact-btn': "اتصل بي",
+
+}
+};
+
+
+
+  document.getElementById('contact-btn').addEventListener('click', function(event) {
+    event.preventDefault(); // لمنع فتح الرابط الفوري بالبريد (يمكن إزالة إذا تريد البريد يفتح)
+
+    const target = document.querySelector('.stats');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+
+
+    // إدارة تبديل الثيم
+    const themeToggle = document.querySelector('.theme-toggle');
+    const body = document.body;
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      body.setAttribute('data-theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      themeToggle.setAttribute('data-theme', newTheme === 'dark' ? 'light' : 'dark');
+      
+      // حفظ الثيم في localStorage
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // تحميل الثيم المحفوظ
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    body.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    // إدارة تبديل اللغة
+    const langButtons = document.querySelectorAll('.lang-btn');
+    const elementsToTranslate = document.querySelectorAll('[data-text]');
+    
+    function changeLanguage(lang) {
+      // تحديث اتجاه الصفحة
+      const html = document.documentElement;
+      if (lang === 'ar') {
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'ar');
+      } else {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', lang);
+      }
+      
+      // تحديث النصوص
+      elementsToTranslate.forEach(element => {
+        const key = element.getAttribute('data-text');
+        if (translations[lang] && translations[lang][key]) {
+          // إضافة تأثير الانتقال
+          element.classList.add('fade-transition');
+          
+          setTimeout(() => {
+            element.textContent = translations[lang][key];
+            element.classList.remove('fade-transition');
+            element.classList.add('fade-in');
+            
+            setTimeout(() => {
+              element.classList.remove('fade-in');
+            }, 300);
+          }, 150);
+        }
+      });
+      
+      // تحديث كود المهارات
+      updateSkillsCode(lang);
+      
+      // تحديث الأزرار
+      langButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // حفظ اللغة
+      localStorage.setItem('language', lang);
+    }
+    
+    function updateSkillsCode(lang) {
+      const skillsCode = document.querySelector('.skills-code');
+      let codeContent = '';
+      
+      if (lang === 'ar') {
+        codeContent = `<span class="keyword">const</span> مهارات = {<br>
+&nbsp;&nbsp;<span class="string">"الخلفية"</span>: [<span class="string">"Laravel"</span>, <span class="string">"PHP"</span>, <span class="string">"Node.js"</span>],<br>
+&nbsp;&nbsp;<span class="string">"الواجهة"</span>: [<span class="string">"React"</span>, <span class="string">"Vue.js"</span>, <span class="string">"JavaScript"</span>],<br>
+&nbsp;&nbsp;<span class="string">"الجوال"</span>: [<span class="string">"React Native"</span>, <span class="string">"Flutter"</span>],<br>
+&nbsp;&nbsp;<span class="string">"قاعدة_البيانات"</span>: [<span class="string">"MySQL"</span>, <span class="string">"MariaDB"</span>, <span class="string">"MongoDB"</span>],<br>
+&nbsp;&nbsp;<span class="string">"الذكاء_الاصطناعي"</span>: [<span class="string">"OpenAI API"</span>, <span class="string">"GPT Integration"</span>],<br>
+&nbsp;&nbsp;<span class="string">"النشر"</span>: [<span class="string">"cPanel"</span>, <span class="string">"AWS"</span>, <span class="string">"Docker"</span>]<br>
+};<br><br>
+<span class="comment">// دائماً نتعلم، دائماً نتحسن</span>`;
+      } else if (lang === 'fr') {
+        codeContent = `<span class="keyword">const</span> compétences = {<br>
+&nbsp;&nbsp;<span class="string">"backend"</span>: [<span class="string">"Laravel"</span>, <span class="string">"PHP"</span>, <span class="string">"Node.js"</span>],<br>
+&nbsp;&nbsp;<span class="string">"frontend"</span>: [<span class="string">"React"</span>, <span class="string">"Vue.js"</span>, <span class="string">"JavaScript"</span>],<br>
+&nbsp;&nbsp;<span class="string">"mobile"</span>: [<span class="string">"React Native"</span>, <span class="string">"Flutter"</span>],<br>
+&nbsp;&nbsp;<span class="string">"base_de_données"</span>: [<span class="string">"MySQL"</span>, <span class="string">"MariaDB"</span>, <span class="string">"MongoDB"</span>],<br>
+&nbsp;&nbsp;<span class="string">"ia"</span>: [<span class="string">"OpenAI API"</span>, <span class="string">"GPT Integration"</span>],<br>
+&nbsp;&nbsp;<span class="string">"déploiement"</span>: [<span class="string">"cPanel"</span>, <span class="string">"AWS"</span>, <span class="string">"Docker"</span>]<br>
+};<br><br>
+<span class="comment">// Toujours apprendre, toujours s'améliorer</span>`;
+      } else {
+        codeContent = `<span class="keyword">const</span> skills = {<br>
+&nbsp;&nbsp;<span class="string">"backend"</span>: [<span class="string">"Laravel"</span>, <span class="string">"PHP"</span>, <span class="string">"Node.js"</span>],<br>
+&nbsp;&nbsp;<span class="string">"frontend"</span>: [<span class="string">"React"</span>, <span class="string">"Vue.js"</span>, <span class="string">"JavaScript"</span>],<br>
+&nbsp;&nbsp;<span class="string">"mobile"</span>: [<span class="string">"React Native"</span>, <span class="string">"Flutter"</span>],<br>
+&nbsp;&nbsp;<span class="string">"database"</span>: [<span class="string">"MySQL"</span>, <span class="string">"MariaDB"</span>, <span class="string">"MongoDB"</span>],<br>
+&nbsp;&nbsp;<span class="string">"ai"</span>: [<span class="string">"OpenAI API"</span>, <span class="string">"GPT Integration"</span>],<br>
+&nbsp;&nbsp;<span class="string">"deployment"</span>: [<span class="string">"cPanel"</span>, <span class="string">"AWS"</span>, <span class="string">"Docker"</span>]<br>
+};<br><br>
+<span class="comment">// Always learning, always improving</span>`;
+      }
+      
+      skillsCode.innerHTML = codeContent;
+    }
+    
+    // إضافة مستمعات الأحداث للغة
+    langButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const lang = button.getAttribute('data-lang');
+        changeLanguage(lang);
+      });
+    });
+    
+    // تحميل اللغة المحفوظة
+    const savedLang = localStorage.getItem('language') || 'en';
+    changeLanguage(savedLang);
+    
+    // تأثيرات إضافية للانتقال السلس
+    document.addEventListener('DOMContentLoaded', () => {
+      // تأثير الكتابة المتجدد
+      const typingElement = document.querySelector('.typing');
+      const texts = {
+        en: 'Creating digital solutions with passion and precision...',
+        fr: 'Création de solutions numériques avec passion et précision...',
+        ar: 'أصنع الحلول الرقمية بشغف ودقة...'
+      };
+      
+      function typeWriter(text, element, speed = 50) {
+        element.innerHTML = '';
+        let i = 0;
+        const timer = setInterval(() => {
+          if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+          } else {
+            clearInterval(timer);
+          }
+        }, speed);
+      }
+      
+      // إعادة تشغيل تأثير الكتابة عند تغيير اللغة
+      const observer = new MutationObserver(() => {
+        const currentLang = document.documentElement.getAttribute('lang') || 'en';
+        if (texts[currentLang] && typingElement.textContent === texts[currentLang]) {
+          setTimeout(() => {
+            typeWriter(texts[currentLang], typingElement);
+          }, 500);
+        }
+      });
+      
+      observer.observe(typingElement, { childList: true, subtree: true });
+    });
+    
+    // تحسين الأداء مع تأثيرات الموازاة
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'slideInUp 0.6s ease forwards';
+        }
+      });
+    }, observerOptions);
+    
+    // مراقبة العناصر للتأثيرات
+    document.querySelectorAll('.section, .stat-card, .project-terminal').forEach(el => {
+      observer.observe(el);
+    });
+    
+    // إضافة تأثير slideInUp
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .section, .stat-card, .project-terminal {
+        opacity: 0;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
