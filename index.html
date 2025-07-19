@@ -520,6 +520,92 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+/* شاشة تابلت عرض متوسط */
+@media (max-width: 1024px) {
+  .glitch {
+    font-size: 3rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .typing {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .project-title {
+    font-size: 1.3rem;
+  }
+
+  .hire-btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+}
+
+/* شاشة هاتف ذكي */
+@media (max-width: 600px) {
+  .glitch {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .typing {
+    font-size: 0.9rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+  }
+
+  .hire-btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  .code-block {
+    padding: 1rem;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .control-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
 
 
   </style>
@@ -991,7 +1077,7 @@ Welcome! Your ideas can be turned into reality. Contact us to create your projec
   document.getElementById('contact-btn').addEventListener('click', function(event) {
     event.preventDefault(); // لمنع فتح الرابط الفوري بالبريد (يمكن إزالة إذا تريد البريد يفتح)
 
-    const target = document.querySelector('.stats');
+    const target = document.querySelector('.contact-matrix');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
